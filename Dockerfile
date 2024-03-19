@@ -2,7 +2,8 @@ FROM golang:1.20 as builder
 
 ENV CGO_ENABLED="0" \
     GOOS="linux" \
-    GOARCH="amd64"
+    GOARCH="amd64" \
+    GOPROXY=https://goproxy.cn
 
 WORKDIR /go/src/github.com/h3poteto/fluentd-sidecar-injector
 
@@ -14,7 +15,7 @@ COPY . .
 RUN set -ex && \
     make build
 
-FROM gcr.io/distroless/static:nonroot
+FROM gcr.lank8s.cn/distroless/static:nonroot
 WORKDIR /
 COPY --from=builder /go/src/github.com/h3poteto/fluentd-sidecar-injector/fluentd-sidecar-injector .
 USER nonroot:nonroot
