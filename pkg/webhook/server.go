@@ -293,6 +293,9 @@ func injectFluentD(pod *corev1.Pod) (*kwhmutating.MutatorResult, error) {
 	if value, ok := pod.Annotations[annotationPrefix+"/config-volume"]; ok {
 		volumes := pod.Spec.Volumes
 		for i := range volumes {
+			if volumes[i].ConfigMap == nil {
+				continue
+			}
 			if name := volumes[i].ConfigMap.Name; name == value {
 				sidecar.VolumeMounts = append(sidecar.VolumeMounts, corev1.VolumeMount{
 					Name:      name,
@@ -556,6 +559,9 @@ func injectFluentBit(pod *corev1.Pod) (*kwhmutating.MutatorResult, error) {
 	if value, ok := pod.Annotations[annotationPrefix+"/config-volume"]; ok {
 		volumes := pod.Spec.Volumes
 		for i := range volumes {
+			if volumes[i].ConfigMap == nil {
+				continue
+			}
 			if name := volumes[i].ConfigMap.Name; name == value {
 				sidecar.VolumeMounts = append(sidecar.VolumeMounts, corev1.VolumeMount{
 					Name:      name,
