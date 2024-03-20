@@ -296,9 +296,11 @@ func injectFluentD(pod *corev1.Pod) (*kwhmutating.MutatorResult, error) {
 			if volumes[i].ConfigMap == nil {
 				continue
 			}
-			if name := volumes[i].ConfigMap.Name; name == value {
+			// 使用configMap name与config-volume 做比较
+			if cmName := volumes[i].ConfigMap.Name; cmName == value {
+				volumeName := volumes[i].Name
 				sidecar.VolumeMounts = append(sidecar.VolumeMounts, corev1.VolumeMount{
-					Name:      name,
+					Name:      volumeName,
 					MountPath: "/fluentd/etc"})
 				break
 			}
@@ -562,9 +564,11 @@ func injectFluentBit(pod *corev1.Pod) (*kwhmutating.MutatorResult, error) {
 			if volumes[i].ConfigMap == nil {
 				continue
 			}
-			if name := volumes[i].ConfigMap.Name; name == value {
+			// 使用configMap name与config-volume 做比较
+			if cmName := volumes[i].ConfigMap.Name; cmName == value {
+				volumeName := volumes[i].Name
 				sidecar.VolumeMounts = append(sidecar.VolumeMounts, corev1.VolumeMount{
-					Name:      name,
+					Name:      volumeName,
 					MountPath: "/fluent-bit/etc"})
 				break
 			}
