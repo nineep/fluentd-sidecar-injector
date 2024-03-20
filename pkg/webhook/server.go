@@ -280,8 +280,13 @@ func injectFluentD(pod *corev1.Pod) (*kwhmutating.MutatorResult, error) {
 		Value: applicationLogDir,
 	})
 
+	// 指定log volume挂载到ApplicationLogDir
+	logVolumeName := VolumeName
+	if value, ok := pod.Annotations[annotationPrefix+"log-volume"]; ok {
+		logVolumeName = value
+	}
 	volumeMount := corev1.VolumeMount{
-		Name:      VolumeName,
+		Name:      logVolumeName,
 		ReadOnly:  false,
 		MountPath: applicationLogDir,
 	}
@@ -548,8 +553,13 @@ func injectFluentBit(pod *corev1.Pod) (*kwhmutating.MutatorResult, error) {
 		Value: applicationLogDir,
 	})
 
+	// 指定log volume挂载到ApplicationLogDir
+	logVolumeName := VolumeName
+	if value, ok := pod.Annotations[annotationPrefix+"log-volume"]; ok {
+		logVolumeName = value
+	}
 	volumeMount := corev1.VolumeMount{
-		Name:      VolumeName,
+		Name:      logVolumeName,
 		ReadOnly:  false,
 		MountPath: applicationLogDir,
 	}
